@@ -1,0 +1,295 @@
+﻿
+<html>
+    <head>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" />
+    <script type="text/javascript" src="js/libs/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/libs/kinetic.js"></script>
+    <script type="text/javascript">
+        /* Classe qui contient les informations sur le déroulement du jeu */
+        function Game(stage, foregroundLayer, player, target, ball) {
+            //propriétés
+            this.stage = stage;
+            this.foregroundLayer = foregroundLayer;
+            this.level = 1;
+            this.player = player;
+            this.target = target,
+            this.ball = ball;
+            this.running = false;
+            this.over = false;
+        };
+        //--- methodes
+        // commencer le jeu
+        Game.prototype.start = function() {
+            this.running = true;
+            this.stage.start();
+        };
+        
+        //classe qui contient les infos sur le joueur et qui crée le palet qu'il va controler
+        function Player() {
+            //configuration du paler
+            var config = {
+                x: 800 / 2,
+                y: 600 / 2,
+                radius: 40,
+                fill: 'red',
+                stroke: 'black',
+                strokeWidth: 4,
+                draggable :true   
+            };
+            //appel de la configuration plus haut dans e but de creer le palet
+            Kinetic.Circle.call(this, config);
+            //les points de départ du joueur
+            this.points = 0;
+            this.taille = 30;
+            this.limits = 30;
+            this.lastPoints = null;
+            //son nom @todo proposé de rentrer son nom voir e recuperer via fb connect
+            this.name = 'Player';
+        };
+        // création du palet
+        Player.prototype = new Kinetic.Circle({});
+        // on précise qui est le constructeur de la class
+        Player.prototype.constructor = Player;
+
+        //recuperer la direction ou doit aller la balle
+        Player.prototype.getDirection = function(){
+
+        };
+        //recuperer la vittesse que va devoir prendre la balle
+        Player.prototype.getSpeed = function(){
+
+        };
+        /* target class */
+        function Target() {
+            var config = {
+                x: 800 * Math.random(),
+                y: 600* Math.random(),
+                radius: 30,
+                fill: 'black',
+                stroke: '#FFFF00',
+                strokeWidth: 1,
+                
+                
+            };
+            Kinetic.Circle.call(this, config);
+            this.points = 0;
+            this.name = 'Target';
+        };
+        Target.prototype = new Kinetic.Circle({});
+        Target.prototype.constructor = Target;
+        // Définition de la classe Ball
+        function Ball() {
+            var config = {
+                radius : 20,
+                fill : 'white',
+                x : 75,
+                y : 330
+                
+            };
+            Kinetic.Circle.call(this, config);
+            // sa vitesse actuelle
+            this.speedX = 4;
+            this.speedY = 4; 
+            
+            this.speedAdded = 4;
+            
+            
+        };
+        Ball.prototype = new Kinetic.Circle({});
+        Ball.prototype.constructor = Ball;
+
+        Ball.prototype.moreSpeed = function(){
+            this.speedAdded =4;
+            
+        }
+
+        Ball.prototype.verticalBounce = function(){
+            console.log('vertical');
+            this.speedX = this.speedX * (-1)
+            
+        }
+        Ball.prototype.horizontalBounce = function(){
+            console.log('horizontal');
+            this.speedY = this.speedY * (-1)
+        }
+        // comment la bale doit se deplacer et gestion des collisions
+        Ball.prototype.move = function(game, player,mirror,target){
+
+            // si la balle touche le mur horizontal
+            if (this.attrs.y <= 0 ||  this.attrs.y >= 600) {
+                this.horizontalBounce();
+            }
+            // si la balle touche le mur vertical
+            else if( this.attrs.x <= 0 ||  this.attrs.x >= 800) {
+                this.verticalBounce();
+            }
+
+            // si la balle touche un obstacle
+            else if( mirror.intersects(this.getPosition())){
+                this.verticalBounce();
+                this.horizontalBounce();
+            }
+            // si la balle touche le joueur
+            else if( player.intersects(this.getPosition())){
+
+                p1 = player.lastPoints[player.lastPoints.length - 1];
+                //console.log(p1);
+                p2 = player.lastPoints[player.lastPoints.length - 10];
+               
+                angle = Math.atan2(p1.y - p2.y, p1.x - p2.x);
+
+                this.speedX = Math.cos(angle);
+                this.speedY = Math.sin(angle);
+                this.speedX = this.speedX * this.speedAdded;
+                this.speedY =this.speedY* this.speedAdded;
+                this.moreSpeed();
+                console.log(this.speedAdded);
+            }
+
+            else if( target.intersects(this.getPosition())){
+                console.log('win');
+            }
+            this.attrs.x +=  this.speedX;
+            this.attrs.y +=  this.speedY;
+        };
+        // fonction appelé quand tout est chargé
+        function initStage(){
+            // création du stage
+            var stage = new Kinetic.Stage({
+                container : "board",
+                width: 800,
+                height: 600
+            })
+            
+            // background
+            var backgroundLayer = new Kinetic.Layer();
+            var background = new Kinetic.Rect({
+                fill: 'black',
+                x : 0,
+                y : 0,
+                width : 800,
+                height : 600
+            });
+            
+           
+            
+            backgroundLayer.add(background);
+            
+            
+            // foreground qui va contenir tout les objets que l'on anime
+            var foregroundLayer = new Kinetic.Layer();
+            //ajout d'un fond 
+            
+            
+            
+            // player
+            var player = new Player();
+            foregroundLayer.add(player);
+            
+            
+            // ball
+            var ball = new Ball();
+            foregroundLayer.add(ball);
+            var target = new Target();
+            foregroundLayer.add(target);
+            // game obj
+            var game = new Game(stage, foregroundLayer,player, ball);
+            
+            
+            
+            var welcomeScreen = new Kinetic.Group();
+            var wbg = new Kinetic.Rect({
+                        x : 260,
+                        y : 230,
+                        width: 290,
+                        height: 120,
+                        fill : '#666',
+                        alpha: 0.9
+            });
+                        
+            var start = new Kinetic.Text({
+                        x : 295,
+                        y : 315,
+                        fontSize : 13,
+                        fontFamily : 'Calibri',
+                        text : 'Appuyer sur start',
+                        textFill : 'white'
+            });
+            welcomeScreen.add(wbg);
+            welcomeScreen.add(start);
+            foregroundLayer.add(welcomeScreen);
+            
+            stage.add(backgroundLayer);
+            stage.add(foregroundLayer);
+            
+            
+            var rectangle2 = new Kinetic.Rect({
+                        x : 400,
+                        y : 360,
+                        width: 120,
+                        height: 120,
+                        fill : '#FFF',
+                        alpha: 0.9
+                });
+            
+            foregroundLayer.add(rectangle2);
+
+            // key events
+            var input = {};
+            document.addEventListener('keydown', function(e){
+                
+                if (game.running == true) {
+                    e.preventDefault();
+                };
+                
+                input[e.which] = true;
+                
+                // start game
+                if (input[32] == true && game.over == false) {
+                    e.preventDefault();
+                    if (game.running == false) {
+                        foregroundLayer.remove(welcomeScreen);
+                        game.start();
+                        
+                    } else {
+                        if (game.turn == 1) {
+                            game.ball.start();
+                        };
+                    };
+                };
+                
+            });
+
+            stage.onFrame(function(){
+                
+                ball.move(game, player,rectangle2,target);
+                
+                // refresh scoreboard
+                if (player.lastPoints == null){
+                    
+                player.lastPoints = new Array();
+                }
+               // console.log('push X : ', player.getX(),' Y : ' ,player.getY());
+                player.lastPoints.push({ x: player.getX(), y: player.getY() });
+               
+               
+                foregroundLayer.draw();
+            });
+            
+        }; 
+        
+        $(function(){
+            initStage();
+        });
+        
+    </script>    
+    </head>
+    <body>
+        
+        <div id="board"></div>
+        
+        
+            
+        
+    </body>
+</html>
