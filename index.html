@@ -13,11 +13,12 @@
     <body>
         
         <div id="content">
+        <header><div id="filter"><label>Show me:</label></div></header>
             
         </div>
 
 
-        <script id="contactTemplate" type="text/template">
+        <script id="scoreTemplate" type="text/template">
             <img src="<%= photo %>" alt="<%= name %>" />
             <h1><%= name ,' ',lastname%><span><%= sexe %></span></h1>
             
@@ -29,6 +30,15 @@
         </script>
         <script id="gameTemplate" type="text/template">
             <div id="board"></div>
+            
+        </script>
+        <script id="gameFinishTemplate" type="text/template">
+			<p> votre score : <%= score %> </p>
+            <ul>
+				<li><a href='#game' id="replay">rejouer</a></li>
+				<li><a id="showScore" href='#score'>voir les score</a></li>
+				<li><a id="replay">enregistrer score</a></li>
+			</ul>
             
         </script>
         
@@ -98,7 +108,8 @@
         <script type="text/javascript" src="js/jeu/Ball.js"></script>
         <script type="text/javascript" src="js/jeu/Game.js"></script>
         <script type="text/javascript" src="js/jeu/Player.js"></script>
-        <script type="text/javascript" src="js/jeu/Target.js"></script>
+        <script type="text/javascript" src="js/jeu/GestionPoint.js"></script>
+		<script type="text/javascript" src="js/jeu/Target.js"></script>
         <script type="text/javascript" src="js/jeu/Main.js"></script>
 
         <!-- Composat appli -->

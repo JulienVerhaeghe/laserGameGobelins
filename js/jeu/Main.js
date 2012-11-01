@@ -40,11 +40,23 @@ var HEIGHT = 480;
             foregroundLayer.add(ball);
             var target = new Target();
             foregroundLayer.add(target);
+			// gesion des points
+			var gestionPoint = new GestionPoint();
             // game obj
             var game = new Game(stage, foregroundLayer,player, ball);
             
             
-            
+            var textScore = new Kinetic.Text({
+                x: 100,
+                y : 0,
+                text : 'Score: '+player.points,
+                textFill : 'white',
+                padding : 5,
+                fontSize : 8                
+            });
+			
+            foregroundLayer.add(textScore);
+
             var welcomeScreen = new Kinetic.Group();
             var wbg = new Kinetic.Rect({
                         x : 0,
@@ -107,11 +119,11 @@ var HEIGHT = 480;
                 };
                 
             });
-
+			window.scoreJoueur = new Score();
             stage.onFrame(function(){
                 
                 ball.move(game, player,rectangle2,target);
-                
+                scoreJoueur.onTimerEvent();
                 // refresh scoreboard
                 if (player.lastPoints == null){
                     
@@ -119,7 +131,7 @@ var HEIGHT = 480;
                 }
                
                 player.lastPoints.push({ x: player.getX(), y: player.getY() });
-               
+                textScore.attrs.text = 'Score: '+scoreJoueur.get('score');
                
                 foregroundLayer.draw();
             });

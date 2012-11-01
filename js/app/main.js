@@ -1,7 +1,7 @@
 ﻿(function ($) {
 
     //demo data
-    var contacts = [
+    var scoresBDD = [
         { name: "joe", lastname:'dalton',score:'70',sexe:'M',photo:'' },
         { name: "averel", lastname:'dalton',score:'90',sexe:'M',photo:'' },
         { name: "monique", lastname:'parson',score:'980',sexe:'F',photo:'' }
@@ -9,25 +9,30 @@
     ];
 
     //define product model
-    var Contact = Backbone.Model.extend({
+    window.Score = Backbone.Model.extend({
         defaults: {
             name: "",
             score: "0",
             sexe: "",
             photo: "/img/placeholder.png"
-        }
+        },
+		onTimerEvent : function(){
+			var scoreActuel = this.get('score');
+			scoreActuel -=3;
+			this.set({'score' : scoreActuel });
+		}
     });
 
     //define directory collection
     var Directory = Backbone.Collection.extend({
-        model: Contact
+        model: Score
     });
 
     //define individual contact view
-    var ContactView = Backbone.View.extend({
+    var ScoreView = Backbone.View.extend({
         tagName: "article",
-        className: "contact-container",
-        template: _.template($("#contactTemplate").html()),
+        className: "score-container",
+        template: _.template($("#scoreTemplate").html()),
         
 
         render: function () {
@@ -42,7 +47,7 @@
         el: $("#content"),
 
         initialize: function () {
-            this.collection = new Directory(contacts);
+            this.collection = new Directory(scoresBDD);
 
             this.render();
             this.$el.find("#filter").append(this.createSelect());
@@ -53,16 +58,17 @@
         },
 
         render: function () {
-            this.$el.html('<header><div id="filter"><label>Show me:</label></div></header>');
             this.$el.find("article").remove();
+            this.$el.html('<header><div id="filter"><label>Show me:</label></div></header>');
 
             _.each(this.collection.models, function (item) {
-                this.renderContact(item);
+                this.renderScore(item);
             }, this);
+            this.createSelect();
         },
 
-        renderContact: function (item) {
-            var contactView = new ContactView({
+        renderScore: function (item) {
+            var contactView = new ScoreView({
                 model: item
             });
             this.$el.append(contactView.render().el);
@@ -105,10 +111,10 @@
         //filter the view
         filterByType: function () {
             if (this.filterType === "all") {
-                this.collection.reset(contacts);
-                contactsRouter.navigate("filter/all");
+                this.collection.reset(scoresBDD);
+                app.navigate("filter/all");
             } else {
-                this.collection.reset(contacts, { silent: true });
+                this.collection.reset(scoresBDD, { silent: true });
 
                 var filterType = this.filterType,
                     filtered = _.filter(this.collection.models, function (item) {
@@ -117,13 +123,14 @@
 
                 this.collection.reset(filtered);
 
-                contactsRouter.navigate("filter/" + filterType);
+                app.navigate("filter/" + filterType);
             }
         }
 
         
         
     });
+	
     //define master view Game
     var GameView = Backbone.View.extend({
         el: $("#content"),
@@ -136,6 +143,23 @@
         render: function () {
             this.$el.html(this.template());
 			initStage();
+            return this;
+        },
+
+    });
+    //define master view Game
+    var GameFinishView = Backbone.View.extend({
+        el: $("#content"),
+
+        tagName: "div",
+        className: "gameFinish",
+        template: _.template($("#gameFinishTemplate").html()),
+        
+
+        render: function () {
+			console.log('render gameFinish ');
+            this.$el.html(this.template(this.model.toJSON()));
+            
             return this;
         },
 
@@ -157,11 +181,12 @@
 
     });
     //add routing
-    var ContactsRouter = Backbone.Router.extend({
+    var ScoreRouteur = Backbone.Router.extend({
         routes: {
             "filter/:type": "urlFilter",
             "game": "showGame",
             "score":'showScore',
+            "gameFinish" : 'showFinishGame',
             "*actions" : "showHome"
 
         },
@@ -171,24 +196,34 @@
             directory.trigger("change:filterType");
         },
         showGame : function(){
-            var gameView = new GameView();
+            
             gameView.render();
         },
+        showFinishGame : function(){
+			console.log('showFinisjGame');
+            var gameFinishView = new GameFinishView({
+				model : window.scoreJoueur
+			});
+            gameFinishView.render();
+        },
         showHome : function(){
-            var homeView = new HomeView();
-			console.log('home');
+            
+		
             homeView.render();
         },
         showScore : function(){
-            //create instance of master view
-           var directory = new DirectoryView();
+            directory.render();
+           
         }
     });
-
+    var gameView = new GameView();
+    
+    var homeView = new HomeView();
+	var directory = new DirectoryView();
     
 
     //create router instance
-    var contactsRouter = new ContactsRouter();
+    window.app = new ScoreRouteur();
 
     //start history service
     Backbone.history.start();

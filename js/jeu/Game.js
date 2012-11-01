@@ -16,3 +16,24 @@
             this.running = true;
             this.stage.start();
         };
+		Game.prototype.stop = function() {
+            this.running = false;
+            this.stage.stop();
+        };
+        Game.prototype.finish = function() {
+            this.stop();
+            var message = new Kinetic.Text({
+                        x : 0,
+                        y : 0,
+                        fontSize : 14,
+                        fontFamily : 'Calibri',
+                        text : 'GAME OVER',
+                        textFill : 'white'
+                    });
+            this.over = true;
+
+            
+            
+            window.app.navigate("#gameFinish", {trigger: true})
+            
+        };

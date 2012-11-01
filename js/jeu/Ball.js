@@ -68,7 +68,7 @@
             }
 
             else if( target.intersects(this.getPosition())){
-                console.log('win');
+                game.finish();
             }
             this.attrs.x +=  this.speedX;
             this.attrs.y +=  this.speedY;
