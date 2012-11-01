@@ -1,8 +1,8 @@
-﻿/* target class */
+﻿        /* target class */
         function Target() {
             var config = {
-                x: constWidth * Math.random(),
-                y: constHeight* Math.random(),
+                x: 800 * Math.random(),
+                y: 600* Math.random(),
                 radius: 30,
                 fill: 'black',
                 stroke: '#FFFF00',

@@ -1,4 +1,4 @@
-﻿/* ball class */
+﻿ // Définition de la classe Ball
         function Ball() {
             var config = {
                 radius : 20,
@@ -8,42 +8,68 @@
                 
             };
             Kinetic.Circle.call(this, config);
-            this.speed = 4;
-            this.regularSpeed = 4;
-            this.direction = { x: -1, y: -1 };
+            // sa vitesse actuelle
+            this.speedX = 4;
+            this.speedY = 4; 
+            
+            this.speedAdded = 4;
+            
             
         };
         Ball.prototype = new Kinetic.Circle({});
         Ball.prototype.constructor = Ball;
-        Ball.prototype.move = function(game, player,mirror){
-           
+
+        Ball.prototype.moreSpeed = function(){
+            this.speedAdded =4;
             
-            if (this.speed > 0 && this.attrs.y <= 0 || this.speed > 0 && this.attrs.y >= 600) {
-                this.direction.y = this.direction.y * (-1)
+        }
+
+        Ball.prototype.verticalBounce = function(){
+            console.log('vertical');
+            this.speedX = this.speedX * (-1)
+            
+        }
+        Ball.prototype.horizontalBounce = function(){
+            console.log('horizontal');
+            this.speedY = this.speedY * (-1)
+        }
+        // comment la bale doit se deplacer et gestion des collisions
+        Ball.prototype.move = function(game, player,mirror,target){
+
+            // si la balle touche le mur horizontal
+            if (this.attrs.y <= 0 ||  this.attrs.y >= 600) {
+                this.horizontalBounce();
             }
-            else if(this.speed > 0 && this.attrs.x <= 0 || this.speed > 0 && this.attrs.x >= 800) {
-                
-                this.direction.x = this.direction.x * (-1);
+            // si la balle touche le mur vertical
+            else if( this.attrs.x <= 0 ||  this.attrs.x >= 800) {
+                this.verticalBounce();
             }
 
-            else if(this.speed > 0 && mirror.intersects(this.getPosition())){
-                this.direction.x = this.direction.x * (-1);
-                this.direction.y = this.direction.y * (-1);
-                console.log('mirror');
+            // si la balle touche un obstacle
+            else if( mirror.intersects(this.getPosition())){
+                this.verticalBounce();
+                this.horizontalBounce();
             }
-            else if(this.speed > 0 && player.intersects(this.getPosition())){
+            // si la balle touche le joueur
+            else if( player.intersects(this.getPosition())){
 
                 p1 = player.lastPoints[player.lastPoints.length - 1];
+                //console.log(p1);
                 p2 = player.lastPoints[player.lastPoints.length - 10];
+               
                 angle = Math.atan2(p1.y - p2.y, p1.x - p2.x);
 
-                this.direction.x = this.direction.x * (-1);
-                this.direction.y = this.direction.y * (-1);
-                console.log('player');
+                this.speedX = Math.cos(angle);
+                this.speedY = Math.sin(angle);
+                this.speedX = this.speedX * this.speedAdded;
+                this.speedY =this.speedY* this.speedAdded;
+                this.moreSpeed();
+                console.log(this.speedAdded);
             }
-            
-            //console.log('loop');
-            this.attrs.x += this.speed * this.direction.x;
-            this.attrs.y += this.speed * this.direction.y;
+
+            else if( target.intersects(this.getPosition())){
+                console.log('win');
+            }
+            this.attrs.x +=  this.speedX;
+            this.attrs.y +=  this.speedY;
         };
-   
