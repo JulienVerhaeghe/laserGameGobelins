@@ -37,11 +37,11 @@
         Ball.prototype.move = function(game, player,mirror,target){
 
             // si la balle touche le mur horizontal
-            if (this.attrs.y <= 0 ||  this.attrs.y >= 600) {
+            if (this.attrs.y <= 0 ||  this.attrs.y >= HEIGHT) {
                 this.horizontalBounce();
             }
             // si la balle touche le mur vertical
-            else if( this.attrs.x <= 0 ||  this.attrs.x >= 800) {
+            else if( this.attrs.x <= 0 ||  this.attrs.x >= WIDTH) {
                 this.verticalBounce();
             }
 

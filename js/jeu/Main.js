@@ -1,10 +1,12 @@
 ﻿// fonction appelé quand tout est chargé
+var WIDTH = 320;
+var HEIGHT = 480;
         function initStage(){
             // création du stage
             var stage = new Kinetic.Stage({
                 container : "board",
-                width: 800,
-                height: 600
+                width: WIDTH,
+                height: HEIGHT
             })
             
             // background
@@ -13,8 +15,8 @@
                 fill: 'black',
                 x : 0,
                 y : 0,
-                width : 800,
-                height : 600
+                width : WIDTH,
+                height : HEIGHT
             });
             
            
@@ -24,7 +26,7 @@
             
             // foreground qui va contenir tout les objets que l'on anime
             var foregroundLayer = new Kinetic.Layer();
-            //ajout d'un fond 
+       
             
             
             
@@ -45,21 +47,21 @@
             
             var welcomeScreen = new Kinetic.Group();
             var wbg = new Kinetic.Rect({
-                        x : 260,
-                        y : 230,
-                        width: 290,
-                        height: 120,
-                        fill : '#666',
+                        x : 0,
+                        y : 0,
+                        width: 130,
+                        height: 20,
+                        fill : '#FFF',
                         alpha: 0.9
             });
                         
             var start = new Kinetic.Text({
-                        x : 295,
-                        y : 315,
+                        x : 0,
+                        y : 0,
                         fontSize : 13,
                         fontFamily : 'Calibri',
                         text : 'Appuyer sur start',
-                        textFill : 'white'
+                        textFill : 'green'
             });
             welcomeScreen.add(wbg);
             welcomeScreen.add(start);
@@ -70,10 +72,10 @@
             
             
             var rectangle2 = new Kinetic.Rect({
-                        x : 400,
-                        y : 360,
-                        width: 120,
-                        height: 120,
+                        x : 50,
+                        y : 100,
+                        width: 40,
+                        height: 40,
                         fill : '#FFF',
                         alpha: 0.9
                 });
@@ -115,7 +117,7 @@
                     
                 player.lastPoints = new Array();
                 }
-               // console.log('push X : ', player.getX(),' Y : ' ,player.getY());
+               
                 player.lastPoints.push({ x: player.getX(), y: player.getY() });
                
                
@@ -124,6 +126,4 @@
             
         }; 
         
-        $(function(){
-            initStage();
-        });
+       

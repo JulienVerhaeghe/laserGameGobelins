@@ -2,8 +2,8 @@
         function Player() {
             //configuration du paler
             var config = {
-                x: 800 / 2,
-                y: 600 / 2,
+                x: WIDTH / 2,
+                y: HEIGHT / 2,
                 radius: 40,
                 fill: 'red',
                 stroke: 'black',

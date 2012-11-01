@@ -31,6 +31,7 @@
         
 
         render: function () {
+			
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
@@ -38,7 +39,7 @@
 
     //define master view Scores
     var DirectoryView = Backbone.View.extend({
-        el: $("#contacts"),
+        el: $("#content"),
 
         initialize: function () {
             this.collection = new Directory(contacts);
@@ -125,22 +126,7 @@
     });
     //define master view Game
     var GameView = Backbone.View.extend({
-        el: $("#contacts"),
-
-        tagName: "div",
-        className: "game",
-        template: _.template($("#homeTemplate").html()),
-        
-
-        render: function () {
-            this.$el.html(this.template());
-            return this;
-        },
-
-    });
-    //define master view Home
-    var HomeView = Backbone.View.extend({
-        el: $("#contacts"),
+        el: $("#content"),
 
         tagName: "div",
         className: "game",
@@ -148,6 +134,23 @@
         
 
         render: function () {
+            this.$el.html(this.template());
+			initStage();
+            return this;
+        },
+
+    });
+    //define master view Home
+    var HomeView = Backbone.View.extend({
+        el: $("#content"),
+
+        tagName: "div",
+        className: "home",
+        template: _.template($("#homeTemplate").html()),
+        
+
+        render: function () {
+			console.log($("#homeTemplate"));
             this.$el.html(this.template());
             return this;
         },
@@ -173,6 +176,7 @@
         },
         showHome : function(){
             var homeView = new HomeView();
+			console.log('home');
             homeView.render();
         },
         showScore : function(){

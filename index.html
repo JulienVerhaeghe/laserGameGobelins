@@ -1,28 +1,108 @@
 ﻿
 <html>
     <head>
-    <!-- LIBS -->
-    <script type="text/javascript" src="js/libs/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="js/libs/kinetic.js"></script>
-    <script type="text/javascript" src="http://notionbox.de/site_media//js/jquery.tools.min.js"></script>
-
-    <!-- Composants jeu -->
-    <script type="text/javascript" src="js/jeu/Ball.js"></script>
-    <script type="text/javascript" src="js/jeu/Game.js"></script>
-    <script type="text/javascript" src="js/jeu/Player.js"></script>
-    <script type="text/javascript" src="js/jeu/Target.js"></script>
-    <script type="text/javascript" src="js/jeu/Main.js"></script>
-
     
-    <link rel="stylesheet" href="css/reset.css" type="text/css" />
+    
 
+    <link rel="stylesheet" href="css/reset.css" type="text/css" />
+    <link rel="stylesheet" href="css/screen.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic' rel='stylesheet' type='text/css'>
     </head>
     <body>
         
-        <div id="board"></div>
-        
-        
+        <div id="content">
             
+        </div>
+
+
+        <script id="contactTemplate" type="text/template">
+            <img src="<%= photo %>" alt="<%= name %>" />
+            <h1><%= name ,' ',lastname%><span><%= sexe %></span></h1>
+            
+            <dl>
+                <dt>score:</dt><dd><%= score %></dd>
+               
+            </dl>
+            
+        </script>
+        <script id="gameTemplate" type="text/template">
+            <div id="board"></div>
+            
+        </script>
+        
+       
+        
+        
+         <!-- template -->
+        <script id="homeTemplate" type="text/template">
+        	
+        <div class="container">
+	
+			<div class="sp-slideshow">
+            
+			
+				<input id="button-1" type="radio" name="radio-set" class="sp-selector-1 radio" checked="checked" />
+				<label for="button-1" class="button-label-1 radio"></label>
+				
+				<input id="button-2" type="radio" name="radio-set" class="sp-selector-2 radio" />
+				<label for="button-2" class="button-label-2 radio"></label>
+				
+				<input id="button-3" type="radio" name="radio-set" class="sp-selector-3 radio" />
+				<label for="button-3" class="button-label-3 radio"></label>
+				
+				
+				
+				
+				<label for="button-1" class="sp-arrow sp-a1"></label>
+				<label for="button-2" class="sp-arrow sp-a2"></label>
+				<label for="button-3" class="sp-arrow sp-a3"></label>
+				
+				<div class="sp-content">
+					<div class="sp-parallax-bg"></div>
+                    <h1>Laser  <span>Game</span></h1>
+					<ul class="sp-slider clearfix">
+					  <li>
+                      	<h2>welcome</h2>
+                        
+                      </li>
+						<li>
+                        	<h2>how to play</h2>
+                            <p>Deplacer la balle jusqu' la cible le plus rapidement possible</p>
+                        </li>
+						<li>
+                        	<h2>Crédit</h2>
+                            <p>Réalisé par julien verhaeghe das le cadre d'un projet Gobelins</p>
+                        </li>
+						
+					</ul>
+                    <div><a  id='btnPlay' href="#game">Jouer</a></div>
+				</div><!-- sp-content -->
+				
+			</div><!-- sp-slideshow -->
+			
+			
+		</div>
+
+        </script>   
+        <!-- LIBS -->
+        <script type="text/javascript" src="js/libs/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="js/libs/kinetic.js"></script>
+        <script type="text/javascript" src="js/libs/json2.js"></script>
+        <script type="text/javascript" src="js/libs/underscore-min.js"></script>
+        <script type="text/javascript" src="js/libs/backbone-min.js"></script>
+        
+
+        <!-- Composants jeu -->
+        <script type="text/javascript" src="js/jeu/Ball.js"></script>
+        <script type="text/javascript" src="js/jeu/Game.js"></script>
+        <script type="text/javascript" src="js/jeu/Player.js"></script>
+        <script type="text/javascript" src="js/jeu/Target.js"></script>
+        <script type="text/javascript" src="js/jeu/Main.js"></script>
+
+        <!-- Composat appli -->
+        <script type="text/javascript" src="js/app/main.js"></script>
         
     </body>
 </html>
