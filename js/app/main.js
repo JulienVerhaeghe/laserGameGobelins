@@ -1,15 +1,11 @@
 ﻿(function ($) {
 
     //demo data
-    var scoresBDD = [
-        { name: "joe", lastname:'dalton',score:'70',sexe:'M',photo:'' },
-        { name: "averel", lastname:'dalton',score:'90',sexe:'M',photo:'' },
-        { name: "monique", lastname:'parson',score:'980',sexe:'F',photo:'' }
-     
-    ];
+   /*var scoresBDD = [{"name":"Verhaeghe","lastname":"julien","score":"787","sexe":"M","photo":""},{"name":"Tartenfion","lastname":null,"score":"4567","sexe":"M","photo":""},{"name":"DFGHJ","lastname":"DFGHJK","score":"34567","sexe":"F","photo":""},{"name":"DFG","lastname":"OKJN","score":"123","sexe":"F","photo":""}];*/
 
     //define product model
     window.Score = Backbone.Model.extend({
+		urlRoot :'http://julien-verhaeghe.fr/projetJS/api/index.php/scores',
         defaults: {
             name: "",
             score: "0",
@@ -25,6 +21,7 @@
 
     //define directory collection
     var Directory = Backbone.Collection.extend({
+		url:"http://julien-verhaeghe.fr/projetJS/api/index.php/scores",
         model: Score
     });
 
@@ -47,7 +44,7 @@
         el: $("#content"),
 
         initialize: function () {
-            this.collection = new Directory(scoresBDD);
+            this.collection = new Directory();
 
             this.render();
             this.$el.find("#filter").append(this.createSelect());
@@ -65,6 +62,7 @@
                 this.renderScore(item);
             }, this);
             this.createSelect();
+			
         },
 
         renderScore: function (item) {
@@ -111,10 +109,10 @@
         //filter the view
         filterByType: function () {
             if (this.filterType === "all") {
-                this.collection.reset(scoresBDD);
+                this.collection.reset();
                 app.navigate("filter/all");
             } else {
-                this.collection.reset(scoresBDD, { silent: true });
+                this.collection.reset( { silent: true });
 
                 var filterType = this.filterType,
                     filtered = _.filter(this.collection.models, function (item) {
@@ -219,7 +217,7 @@
     var gameView = new GameView();
     
     var homeView = new HomeView();
-	var directory = new DirectoryView();
+	window.directory = new DirectoryView();
     
 
     //create router instance
